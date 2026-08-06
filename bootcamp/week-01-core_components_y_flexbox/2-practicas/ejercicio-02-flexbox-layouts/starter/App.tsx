@@ -36,21 +36,19 @@ export default function App(): React.JSX.Element {
           LAYOUT 1: Header con título y botón
           justifyContent: 'space-between' + flexDirection: 'row'
           ============================================ */}
-      {/* Descomenta las siguientes líneas: */}
-      {/* <LayoutLabel num={1} title="Header: space-between" />
+      <LayoutLabel num={1} title="Header: space-between" />
       <View style={styles.layout1}>
         <Text style={styles.headerTitle}>Inicio</Text>
         <Pressable style={styles.headerBtn} onPress={() => {}}>
           <Text style={styles.headerBtnText}>+ Nuevo</Text>
         </Pressable>
-      </View> */}
+      </View>
 
       {/* ============================================
           LAYOUT 2: Tab bar — 4 ítems distribuidos
           justifyContent: 'space-evenly' + flexDirection: 'row'
           ============================================ */}
-      {/* Descomenta las siguientes líneas: */}
-      {/* <LayoutLabel num={2} title="Tab Bar: space-evenly" />
+      <LayoutLabel num={2} title="Tab Bar: space-evenly" />
       <View style={styles.layout2}>
         {['Inicio', 'Buscar', 'Perfil', 'Config'].map((tab) => (
           <View key={tab} style={styles.tabItem}>
@@ -58,14 +56,13 @@ export default function App(): React.JSX.Element {
             <Text style={styles.tabLabel}>{tab}</Text>
           </View>
         ))}
-      </View> */}
+      </View>
 
       {/* ============================================
           LAYOUT 3: Tarjeta con avatar e información
           flexDirection: 'row' + alignItems: 'center' + flex: 1
           ============================================ */}
-      {/* Descomenta las siguientes líneas: */}
-      {/* <LayoutLabel num={3} title="Tarjeta: row + alignItems center" />
+      <LayoutLabel num={3} title="Tarjeta: row + alignItems center" />
       <View style={styles.layout3}>
         <Image
           source={{ uri: 'https://i.pravatar.cc/56' }}
@@ -77,14 +74,13 @@ export default function App(): React.JSX.Element {
           <Text style={styles.cardSubtitle}>Padre de la computación</Text>
         </View>
         <Text style={styles.cardTimestamp}>2h</Text>
-      </View> */}
+      </View>
 
       {/* ============================================
           LAYOUT 4: Pantalla dividida en proporciones
           flex: 1 vs flex: 2 — proporción 1/3 : 2/3
           ============================================ */}
-      {/* Descomenta las siguientes líneas: */}
-      {/* <LayoutLabel num={4} title="Proporciones: flex: 1 vs flex: 2" />
+      <LayoutLabel num={4} title="Proporciones: flex: 1 vs flex: 2" />
       <View style={styles.layout4}>
         <View style={styles.panel1}>
           <Text style={styles.panelTexto}>1/3</Text>
@@ -94,7 +90,7 @@ export default function App(): React.JSX.Element {
           <Text style={styles.panelTexto}>2/3</Text>
           <Text style={styles.panelHint}>flex: 2</Text>
         </View>
-      </View> */}
+      </View>
     </ScrollView>
   );
 }
@@ -138,8 +134,8 @@ const styles = StyleSheet.create({
 
   // LAYOUT 1 — Header
   layout1: {
-    flexDirection: 'row',           // hijos en fila
-    justifyContent: 'space-between', // título izquierda, botón derecha
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#161b22',
     padding: 16,
@@ -168,8 +164,8 @@ const styles = StyleSheet.create({
 
   // LAYOUT 2 — Tab bar
   layout2: {
-    flexDirection: 'row',     // tabs en fila
-    justifyContent: 'space-evenly', // espacio igual incluyendo extremos
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#161b22',
     paddingVertical: 12,
@@ -192,8 +188,8 @@ const styles = StyleSheet.create({
 
   // LAYOUT 3 — Tarjeta con avatar
   layout3: {
-    flexDirection: 'row',  // imagen y texto en fila
-    alignItems: 'center',  // vertically centered
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#161b22',
     padding: 16,
     borderRadius: 10,
@@ -207,7 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
   },
   cardTextContainer: {
-    flex: 1,  // ocupa todo el espacio entre el avatar y el timestamp
+    flex: 1,
   },
   cardName: {
     fontSize: 16,
@@ -226,7 +222,7 @@ const styles = StyleSheet.create({
 
   // LAYOUT 4 — Proporciones
   layout4: {
-    flexDirection: 'row',  // paneles en fila
+    flexDirection: 'row',
     height: 120,
     borderRadius: 10,
     overflow: 'hidden',
@@ -234,13 +230,13 @@ const styles = StyleSheet.create({
     borderColor: '#30363d',
   },
   panel1: {
-    flex: 1,  // ocupa 1/3 del espacio total
+    flex: 1,
     backgroundColor: '#21262d',
     justifyContent: 'center',
     alignItems: 'center',
   },
   panel2: {
-    flex: 2,  // ocupa 2/3 del espacio total
+    flex: 2,
     backgroundColor: '#161b22',
     justifyContent: 'center',
     alignItems: 'center',
