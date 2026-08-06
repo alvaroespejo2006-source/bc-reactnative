@@ -1,21 +1,15 @@
 // ============================================================
 // TYPES — src/types/index.ts
 // ============================================================
-// Define aquí la interfaz del elemento de tu dominio asignado.
-// Este type se usará en mockData.ts, ItemCard.tsx y HomeScreen.tsx
+// Dominio asignado: Vivero de plantas.
 // ============================================================
 
-// TODO: Renombra esta interfaz con el nombre de tu elemento
-// Ejemplos: Book, Medication, Member, Dish, Movie, Destination
-export interface Item {
+// --- Implementación del aprendiz (Álvaro Enrique Espejo Barreto) ---
+export interface Plant {
   id: string;
   name: string;
   imageUri: string;
-  // TODO: Agrega las propiedades específicas de tu dominio
-  // Ejemplos:
-  //   Biblioteca → author: string; year: number;
-  //   Farmacia → activeIngredient: string; price: number;
-  //   Gimnasio → plan: string; expiresAt: string;
-  //   Restaurante → price: number; description: string;
-  subtitle: string; // campo genérico de apoyo — personaliza según tu dominio
+  subtitle: string; // categoría de la planta
+  supplier: string; // proveedor que abastece la planta
+  price: number; // precio de venta al público
 }

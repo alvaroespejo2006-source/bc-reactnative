@@ -1,43 +1,42 @@
 // ============================================================
 // MOCK DATA — src/data/mockData.ts
 // ============================================================
-// Datos de ejemplo para tu dominio asignado.
-// Reemplaza estos datos con información coherente a tu dominio.
+// Dominio: Vivero de plantas.
 // ============================================================
 
-import { Item } from '../types';
+import { Plant } from '../types';
 
-// TODO: Reemplaza los valores por datos reales de tu dominio
-// Usa imágenes representativas — puedes usar URLs de picsum.photos
-// o incluir imágenes locales en assets/
-
-export const MOCK_ITEMS: Item[] = [
+export const MOCK_ITEMS: Plant[] = [
   {
     id: '1',
-    name: 'Nombre del elemento 1',
-    subtitle: 'Subtítulo o descripción corta',
-    imageUri: 'https://picsum.photos/seed/item1/300/200',
-    // TODO: Agrega las propiedades específicas de tu dominio
+    name: 'Suculenta Echeveria',
+    subtitle: 'Suculenta',
+    imageUri: 'https://picsum.photos/seed/echeveria/300/200',
+    supplier: 'Vivero El Rosal',
+    price: 12000,
   },
   {
     id: '2',
-    name: 'Nombre del elemento 2',
-    subtitle: 'Subtítulo o descripción corta',
-    imageUri: 'https://picsum.photos/seed/item2/300/200',
-    // TODO: Agrega las propiedades específicas de tu dominio
+    name: 'Ficus Lyrata',
+    subtitle: 'Árbol de interior',
+    imageUri: 'https://picsum.photos/seed/ficuslyrata/300/200',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 85000,
   },
   {
     id: '3',
-    name: 'Nombre del elemento 3',
-    subtitle: 'Subtítulo o descripción corta',
-    imageUri: 'https://picsum.photos/seed/item3/300/200',
-    // TODO: Agrega las propiedades específicas de tu dominio
+    name: 'Rosal Rojo',
+    subtitle: 'Arbusto ornamental',
+    imageUri: 'https://picsum.photos/seed/rosalrojo/300/200',
+    supplier: 'Vivero El Rosal',
+    price: 25000,
   },
   {
     id: '4',
-    name: 'Nombre del elemento 4',
-    subtitle: 'Subtítulo o descripción corta',
-    imageUri: 'https://picsum.photos/seed/item4/300/200',
-    // TODO: Agrega las propiedades específicas de tu dominio
+    name: 'Orégano',
+    subtitle: 'Hierba aromática',
+    imageUri: 'https://picsum.photos/seed/oregano/300/200',
+    supplier: 'Agroinsumos del Valle',
+    price: 8000,
   },
 ];
