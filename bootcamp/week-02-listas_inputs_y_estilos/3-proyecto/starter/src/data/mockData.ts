@@ -2,67 +2,92 @@ import { Item } from '../types';
 
 // ============================================
 // MOCK DATA — Semana 02
-// Reemplaza estos items genéricos con datos
-// reales de tu dominio asignado.
-//
-// REQUISITO: mínimo 10 items
+// Dominio: Vivero de plantas.
 // ============================================
-
-// TODO: Renombra ITEMS a algo descriptivo de tu dominio
-//       Ejemplo: BOOKS, MEDICINES, MEMBERS, DISHES...
-// TODO: Actualiza el tipo Item con los campos de tu dominio
-// TODO: Rellena con datos reales y variados de tu dominio
 
 export const ITEMS: Item[] = [
   {
     id: '1',
-    name: 'Elemento 01',
-    // TODO: agregar campos de tu dominio
+    name: 'Suculenta Echeveria',
+    category: 'Suculenta',
+    supplier: 'Vivero El Rosal',
+    price: 12000,
   },
   {
     id: '2',
-    name: 'Elemento 02',
-    // TODO: agregar campos de tu dominio
+    name: 'Ficus Lyrata',
+    category: 'Árbol de interior',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 85000,
   },
   {
     id: '3',
-    name: 'Elemento 03',
-    // TODO: agregar campos de tu dominio
+    name: 'Rosal Rojo',
+    category: 'Arbusto ornamental',
+    supplier: 'Vivero El Rosal',
+    price: 25000,
   },
   {
     id: '4',
-    name: 'Elemento 04',
-    // TODO: agregar campos de tu dominio
+    name: 'Orégano',
+    category: 'Hierba aromática',
+    supplier: 'Agroinsumos del Valle',
+    price: 8000,
   },
   {
     id: '5',
-    name: 'Elemento 05',
-    // TODO: agregar campos de tu dominio
+    name: 'Sábila',
+    category: 'Suculenta',
+    supplier: 'Agroinsumos del Valle',
+    price: 10000,
   },
   {
     id: '6',
-    name: 'Elemento 06',
-    // TODO: agregar campos de tu dominio
+    name: 'Cactus San Pedro',
+    category: 'Cactus',
+    supplier: 'Vivero El Rosal',
+    price: 32000,
   },
   {
     id: '7',
-    name: 'Elemento 07',
-    // TODO: agregar campos de tu dominio
+    name: 'Albahaca',
+    category: 'Hierba aromática',
+    supplier: 'Agroinsumos del Valle',
+    price: 7000,
   },
   {
     id: '8',
-    name: 'Elemento 08',
-    // TODO: agregar campos de tu dominio
+    name: 'Orquídea Phalaenopsis',
+    category: 'Planta de flor',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 60000,
   },
   {
     id: '9',
-    name: 'Elemento 09',
-    // TODO: agregar campos de tu dominio
+    name: 'Potos',
+    category: 'Árbol de interior',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 18000,
   },
   {
     id: '10',
-    name: 'Elemento 10',
-    // TODO: agregar campos de tu dominio
+    name: 'Girasol',
+    category: 'Planta de flor',
+    supplier: 'Agroinsumos del Valle',
+    price: 15000,
   },
-  // TODO: puedes agregar más items para hacer la demo más rica
+  {
+    id: '11',
+    name: 'Lavanda',
+    category: 'Hierba aromática',
+    supplier: 'Vivero El Rosal',
+    price: 20000,
+  },
+  {
+    id: '12',
+    name: 'Bugambilia',
+    category: 'Arbusto ornamental',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 28000,
+  },
 ];
