@@ -8,7 +8,6 @@ import {
   Platform,
   Keyboard,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback,
   ListRenderItem,
 } from 'react-native';
 import { Item } from '../types';
@@ -41,32 +40,31 @@ export function HomeScreen(): React.JSX.Element {
       style={styles.kvContainer}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inner}>
-          <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Buscar planta..."
-              placeholderTextColor={COLORS.textSecondary}
-              value={query}
-              onChangeText={setQuery}
-              keyboardType="default"
-              returnKeyType="search"
-              clearButtonMode="while-editing"
-              onSubmitEditing={Keyboard.dismiss}
-            />
-          </View>
-          <FlatList
-            data={filteredItems}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            ListEmptyComponent={renderEmpty}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            contentContainerStyle={styles.listContent}
-            keyboardShouldPersistTaps="handled"
+      {/* Se eliminó el Pressable problemático y se usa View limpia */}
+      <View style={styles.inner}>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar planta..."
+            placeholderTextColor={COLORS.textSecondary}
+            value={query}
+            onChangeText={setQuery}
+            keyboardType="default"
+            returnKeyType="search"
+            clearButtonMode="while-editing"
+            onSubmitEditing={Keyboard.dismiss}
           />
         </View>
-      </TouchableWithoutFeedback>
+        <FlatList
+          data={filteredItems}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          ListEmptyComponent={renderEmpty}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          contentContainerStyle={styles.listContent}
+          keyboardShouldPersistTaps="handled" // Cierra el teclado de forma nativa y segura al tocar la lista
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }
