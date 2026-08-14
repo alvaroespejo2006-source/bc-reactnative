@@ -43,41 +43,28 @@ export default function App(): React.JSX.Element {
   // ============================================
   // PASO 4: Pull-to-refresh
   // ============================================
-  // Descomenta las siguientes líneas:
-  // const handleRefresh = useCallback(async () => {
-  //   setIsRefreshing(true);
-  //   // En una app real, aquí llamarías a la API para recargar datos
-  //   await new Promise((resolve) => setTimeout(resolve, 1200));
-  //   setIsRefreshing(false);
-  // }, []);
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    // En una app real, aquí llamarías a la API para recargar datos
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    setIsRefreshing(false);
+  }, []);
 
   // ============================================
   // PASO 5: renderItem con Pressable
   // ============================================
-  // Reemplaza el renderItem básico del Paso 1 con este:
-  // const renderItem = ({ item }: { item: Product }) => (
-  //   <Pressable
-  //     style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
-  //     onPress={() => console.log('Seleccionado:', item.name)}
-  //   >
-  //     <View style={styles.itemContent}>
-  //       <Text style={styles.itemName}>{item.name}</Text>
-  //       <Text style={styles.itemCategory}>{item.category}</Text>
-  //     </View>
-  //     <Text style={styles.itemPrice}>${item.price}</Text>
-  //   </Pressable>
-  // );
-
-  // ============================================
-  // PASO 1: renderItem básico
-  // ============================================
-  // Descomenta las siguientes líneas:
-  // const renderItem = ({ item }: { item: Product }) => (
-  //   <View style={styles.item}>
-  //     <Text style={styles.itemName}>{item.name}</Text>
-  //     <Text style={styles.itemCategory}>{item.category}</Text>
-  //   </View>
-  // );
+  const renderItem = ({ item }: { item: Product }) => (
+    <Pressable
+      style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
+      onPress={() => console.log('Seleccionado:', item.name)}
+    >
+      <View style={styles.itemContent}>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemCategory}>{item.category}</Text>
+      </View>
+      <Text style={styles.itemPrice}>${item.price}</Text>
+    </Pressable>
+  );
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -85,41 +72,30 @@ export default function App(): React.JSX.Element {
 
       {/* ============================================
           PASO 1: FlatList básica
-          Descomenta el bloque completo:
           ============================================ */}
-      {/* <FlatList
+      <FlatList
         data={PRODUCTS}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-      /> */}
-
-      {/* ============================================
-          PASO 2: Agrega ItemSeparatorComponent al FlatList del Paso 1
-          Descomenta la línea del separator:
-          ============================================ */}
-      {/* ItemSeparatorComponent={() => <View style={styles.separator} />} */}
-
-      {/* ============================================
-          PASO 3: Header y estado vacío — descomenta estas dos props:
-          ============================================ */}
-      {/* ListHeaderComponent={
-        <Text style={styles.listHeader}>Catálogo de Productos</Text>
-      }
-      ListEmptyComponent={
-        <Text style={styles.emptyText}>No hay productos disponibles</Text>
-      } */}
-
-      {/* ============================================
-          PASO 4: Pull-to-refresh — agrega estas dos props:
-          ============================================ */}
-      {/* refreshing={isRefreshing}
-      onRefresh={handleRefresh} */}
-
-      <View style={styles.placeholder}>
-        <Text style={styles.placeholderText}>
-          Descomenta el Paso 1 para ver la lista
-        </Text>
-      </View>
+        /* ============================================
+            PASO 2: Separador entre items
+            ============================================ */
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        /* ============================================
+            PASO 3: Header y estado vacío
+            ============================================ */
+        ListHeaderComponent={
+          <Text style={styles.listHeader}>Catálogo de Productos</Text>
+        }
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>No hay productos disponibles</Text>
+        }
+        /* ============================================
+            PASO 4: Pull-to-refresh
+            ============================================ */
+        refreshing={isRefreshing}
+        onRefresh={handleRefresh}
+      />
     </SafeAreaView>
   );
 }
