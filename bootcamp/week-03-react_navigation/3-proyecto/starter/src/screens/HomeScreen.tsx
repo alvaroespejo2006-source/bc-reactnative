@@ -1,14 +1,15 @@
 // src/screens/HomeScreen.tsx
-// Pantalla de lista — muestra todos los elementos del dominio.
-// Al presionar un ítem navega al DetailScreen pasando los params.
+// Catálogo del vivero — lista y busca todas las plantas disponibles.
 
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { useMemo, useState } from 'react';
 import {
   FlatList,
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 
@@ -17,51 +18,46 @@ import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '../theme';
 import type { Item } from '../types';
 import type { HomeStackParamList } from '../navigation/types';
 
-// Tipo del navigation hook para este Stack
-type HomeScreenNavigationProp = NativeStackNavigationProp<
-  HomeStackParamList,
-  'HomeList'
->;
+type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeList'>;
 
 export function HomeScreen(): React.JSX.Element {
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const [query, setQuery] = useState('');
 
-  /**
-   * Navega al DetailScreen pasando los datos del ítem seleccionado.
-   * TODO: agrega los campos extra de tu dominio a los params
-   * Ejemplo: navigation.navigate('HomeDetail', { id, name, author, isbn })
-   */
+  const filteredItems = useMemo(() => {
+    if (!query.trim()) return ITEMS;
+    const lower = query.toLowerCase();
+    return ITEMS.filter(
+      (item) =>
+        item.name.toLowerCase().includes(lower) ||
+        item.category.toLowerCase().includes(lower)
+    );
+  }, [query]);
+
   function handleItemPress(item: Item): void {
     navigation.navigate('HomeDetail', {
       id: item.id,
       name: item.name,
-      // TODO: pasar campos adicionales de tu dominio
+      category: item.category,
+      price: item.price,
     });
   }
 
-  /**
-   * Renderiza cada ítem de la lista.
-   * TODO: adaptar el diseño de la tarjeta a tu dominio.
-   * Puedes mostrar más información (precio, autor, género, etc.)
-   */
   function renderItem({ item }: { item: Item }): React.JSX.Element {
     return (
       <Pressable
-        style={({ pressed }) => [
-          styles.card,
-          pressed && styles.cardPressed,
-        ]}
+        style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
         onPress={() => handleItemPress(item)}
-        // testID permite encontrar el elemento en tests
         testID={`item-${item.id}`}
       >
-        <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.itemDescription} numberOfLines={2}>
-          {item.description}
-        </Text>
-        {/* TODO: agregar más información del ítem según tu dominio */}
-        {/* Ejemplo (Farmacia): <Text style={styles.price}>${item.price}</Text> */}
-        {/* Ejemplo (Biblioteca): <Text style={styles.author}>{item.author}</Text> */}
+        <View style={styles.cardContent}>
+          <Text style={styles.itemName}>{item.name}</Text>
+          <Text style={styles.itemSupplier}>{item.supplier}</Text>
+          <Text style={styles.itemPrice}>${item.price.toLocaleString('es-CO')}</Text>
+        </View>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{item.category}</Text>
+        </View>
         <Text style={styles.chevron}>{'›'}</Text>
       </Pressable>
     );
@@ -69,17 +65,31 @@ export function HomeScreen(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      {/* TODO: agregar un header o título descriptivo de tu dominio */}
-      {/* <Text style={styles.header}>Mi Biblioteca</Text> */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar planta o categoría..."
+          placeholderTextColor={COLORS.textSecondary}
+          value={query}
+          onChangeText={setQuery}
+          returnKeyType="search"
+          clearButtonMode="while-editing"
+        />
+      </View>
+
       <FlatList
-        data={ITEMS}
+        data={filteredItems}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
-        // Separador visual entre ítems
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-        // TODO: agregar ListEmptyComponent para cuando no haya datos
-        // ListEmptyComponent={<Text style={styles.empty}>Sin elementos</Text>}
+        keyboardShouldPersistTaps="handled"
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>Sin resultados para "{query}"</Text>
+            <Text style={styles.emptySubText}>Intenta con otro nombre o categoría</Text>
+          </View>
+        }
       />
     </View>
   );
@@ -90,8 +100,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  searchContainer: {
+    paddingHorizontal: SPACING.base,
+    paddingVertical: SPACING.md,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.borderLight,
+  },
+  searchInput: {
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
+    paddingHorizontal: SPACING.base,
+    paddingVertical: 10,
+    color: COLORS.textPrimary,
+    fontSize: TYPOGRAPHY.size.base,
+  },
   list: {
     padding: SPACING.base,
+    flexGrow: 1,
   },
   card: {
     backgroundColor: COLORS.surface,
@@ -104,16 +131,35 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     backgroundColor: COLORS.surfaceAlt,
   },
+  cardContent: {
+    marginBottom: SPACING.sm,
+  },
   itemName: {
     fontSize: TYPOGRAPHY.size.md,
     fontWeight: TYPOGRAPHY.weight.semibold,
     color: COLORS.textPrimary,
     marginBottom: SPACING.xs,
   },
-  itemDescription: {
+  itemSupplier: {
     fontSize: TYPOGRAPHY.size.sm,
     color: COLORS.textSecondary,
-    lineHeight: 18,
+    marginBottom: 2,
+  },
+  itemPrice: {
+    fontSize: TYPOGRAPHY.size.sm,
+    color: COLORS.textSecondary,
+  },
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: COLORS.accentDim,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: 3,
+  },
+  badgeText: {
+    fontSize: TYPOGRAPHY.size.xs,
+    fontWeight: TYPOGRAPHY.weight.semibold,
+    color: COLORS.accent,
   },
   chevron: {
     position: 'absolute',
@@ -124,5 +170,24 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: SPACING.sm,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 80,
+    paddingHorizontal: SPACING.xxl,
+  },
+  emptyText: {
+    fontSize: TYPOGRAPHY.size.md,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    textAlign: 'center',
+    marginBottom: SPACING.sm,
+  },
+  emptySubText: {
+    fontSize: TYPOGRAPHY.size.sm,
+    color: COLORS.textSecondary,
+    textAlign: 'center',
   },
 });

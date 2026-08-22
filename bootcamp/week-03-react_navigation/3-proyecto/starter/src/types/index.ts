@@ -1,47 +1,21 @@
 // src/types/index.ts
-// Define los tipos de datos del dominio.
-// Adapta la interfaz Item a tu dominio asignado.
-
-// ============================================
-// INTERFACE PRINCIPAL DEL DOMINIO
-// ============================================
+// Dominio: Vivero de plantas.
 
 export interface Item {
   id: string;
-  // Nombre del elemento (libro, medicamento, película, rutina, etc.)
   name: string;
-  // Descripción general del elemento
-  description: string;
-
-  // TODO: agregar propiedades específicas de tu dominio
-  // Ejemplos según dominio:
-
-  // Biblioteca:
-  // author: string;
-  // isbn: string;
-  // pages: number;
-  // genre: string;
-
-  // Farmacia:
-  // price: number;
-  // stock: number;
-  // dosage: string;
-  // requiresPrescription: boolean;
-
-  // Gimnasio:
-  // duration: number;   // en minutos
-  // difficulty: 'basic' | 'intermediate' | 'advanced';
-  // muscleGroups: string[];
-
-  // Restaurante:
-  // price: number;
-  // ingredients: string[];
-  // isVegetarian: boolean;
-  // category: string;
-
-  // Cine:
-  // director: string;
-  // year: number;
-  // genre: string;
-  // duration: number;
+  category: string;      // tipo de planta
+  supplier: string;       // proveedor que abastece la planta
+  price: number;          // precio de venta
+  description: string;    // descripción para la ficha de detalle
+  light: string;           // requerimiento de luz
+  watering: string;        // frecuencia de riego
 }
+
+export type PlantCategory =
+  | 'Suculenta'
+  | 'Árbol de interior'
+  | 'Arbusto ornamental'
+  | 'Hierba aromática'
+  | 'Planta de flor'
+  | 'Cactus';

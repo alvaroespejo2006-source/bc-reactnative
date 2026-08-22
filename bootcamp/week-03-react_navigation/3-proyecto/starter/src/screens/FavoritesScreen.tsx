@@ -1,29 +1,20 @@
 // src/screens/FavoritesScreen.tsx
-// Segunda pestaña del Tab Navigator.
-// Muestra una lista de elementos favoritos del dominio.
+// Plantas favoritas del vivero.
 
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { FAVORITES } from '../data/mockData';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '../theme';
 import type { Item } from '../types';
 
 export function FavoritesScreen(): React.JSX.Element {
-  /**
-   * Renderiza cada ítem favorito.
-   * TODO: adaptar el diseño a tu dominio (igual que HomeScreen.renderItem)
-   */
   function renderFavorite({ item }: { item: Item }): React.JSX.Element {
     return (
       <View style={styles.card}>
-        {/* Ícono de favorito */}
         <Text style={styles.heartIcon}>♥</Text>
         <View style={styles.cardContent}>
           <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.itemDescription} numberOfLines={2}>
-            {item.description}
-          </Text>
-          {/* TODO: agregar campos de tu dominio igual que en HomeScreen */}
+          <Text style={styles.itemMeta}>{item.category} · {item.supplier}</Text>
         </View>
       </View>
     );
@@ -31,9 +22,7 @@ export function FavoritesScreen(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      {/* TODO: cambiar el título según tu dominio */}
-      {/* Ejemplos: "Mis Libros Favoritos", "Medicamentos Guardados", etc. */}
-      <Text style={styles.title}>Favoritos</Text>
+      <Text style={styles.title}>Plantas Favoritas</Text>
       <FlatList
         data={FAVORITES}
         keyExtractor={(item) => item.id}
@@ -42,10 +31,7 @@ export function FavoritesScreen(): React.JSX.Element {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>
-              {/* TODO: personalizar el mensaje vacío según tu dominio */}
-              No tienes favoritos todavía
-            </Text>
+            <Text style={styles.emptyText}>No tienes plantas favoritas todavía</Text>
           </View>
         }
       />
@@ -94,10 +80,9 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
     marginBottom: SPACING.xs,
   },
-  itemDescription: {
+  itemMeta: {
     fontSize: TYPOGRAPHY.size.sm,
     color: COLORS.textSecondary,
-    lineHeight: 18,
   },
   separator: {
     height: SPACING.sm,

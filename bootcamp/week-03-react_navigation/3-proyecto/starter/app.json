@@ -1,4 +1,4 @@
-{
+﻿{
   "expo": {
     "name": "week03-navigation",
     "slug": "week03-navigation",
@@ -22,9 +22,7 @@
       },
       "package": "dev.bootcamp.week03navigation"
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": [],
     "newArchEnabled": true
   }
 }
