@@ -6,7 +6,6 @@ import {
   Pressable,
   StyleSheet,
   SafeAreaView,
-  StatusBar,
   ListRenderItem,
 } from 'react-native';
 import { NavigationContainer, useNavigation, useRoute } from '@react-navigation/native';
@@ -43,27 +42,26 @@ const PRODUCTS: Product[] = [
 ];
 
 // ============================================
-// PASO 1: Crear el Stack Navigator tipado
+// PASO 1: Stack Navigator tipado
 // ============================================
-// Descomenta las siguientes líneas:
-// const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 // ============================================
 // SCREEN: HomeScreen
 // ============================================
 function HomeScreen(): React.JSX.Element {
-  // PASO 2: Descomenta para habilitar la navegación
-  // const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
+  // PASO 2: navegación habilitada
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
 
   const renderItem: ListRenderItem<Product> = useCallback(({ item }) => (
     <Pressable
       style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
-      // PASO 2: Descomenta el onPress para navegar con params
-      // onPress={() => navigation.navigate('Detail', {
-      //   id: item.id,
-      //   name: item.name,
-      //   category: item.category,
-      // })}
+      // PASO 2: onPress navega con params
+      onPress={() => navigation.navigate('Detail', {
+        id: item.id,
+        name: item.name,
+        category: item.category,
+      })}
     >
       <View style={styles.itemContent}>
         <Text style={styles.itemName}>{item.name}</Text>
@@ -71,9 +69,8 @@ function HomeScreen(): React.JSX.Element {
       </View>
       <Text style={styles.chevron}>›</Text>
     </Pressable>
-  // PASO 2: añade navigation a las dependencias del useCallback
-  // ), [navigation]);
-  ), []);
+  // PASO 2: navigation en dependencias
+  ), [navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -92,20 +89,15 @@ function HomeScreen(): React.JSX.Element {
 // SCREEN: DetailScreen
 // ============================================
 function DetailScreen(): React.JSX.Element {
-  // PASO 2: Descomenta para poder volver
-  // const navigation = useNavigation();
+  // PASO 2: para poder volver
+  const navigation = useNavigation();
 
-  // PASO 3: Descomenta para recibir los params
-  // type DetailRouteProp = NativeStackRouteProp<RootStackParamList, 'Detail'>;
-  // const route = useRoute<DetailRouteProp>();
-  // const { id, name, category } = route.params;
+  // PASO 3: recibir los params
+  type DetailRouteProp = NativeStackRouteProp<RootStackParamList, 'Detail'>;
+  const route = useRoute<DetailRouteProp>();
+  const { id, name, category } = route.params;
 
-  // Placeholder mientras no están los params (eliminar en PASO 3)
-  const id = '—';
-  const name = 'Descomenta PASO 3';
-  const category = '—';
-
-  // Buscar descripción del producto (disponible tras PASO 3)
+  // Buscar descripción del producto
   const product = PRODUCTS.find((p) => p.id === id);
 
   return (
@@ -120,17 +112,13 @@ function DetailScreen(): React.JSX.Element {
           <Text style={styles.detailDescription}>{product.description}</Text>
         )}
 
-        {/* PASO 2: Descomenta el botón de volver */}
-        {/* <Pressable
+        {/* PASO 2: botón de volver */}
+        <Pressable
           style={({ pressed }) => [styles.backButton, pressed && styles.backButtonPressed]}
           onPress={() => navigation.goBack()}
         >
           <Text style={styles.backButtonText}>← Volver al listado</Text>
-        </Pressable> */}
-
-        <View style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Descomenta PASO 2 para volver</Text>
-        </View>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -140,38 +128,26 @@ function DetailScreen(): React.JSX.Element {
 // App principal
 // ============================================
 export default function App(): React.JSX.Element {
-  // PASO 1: Reemplaza este View por NavigationContainer + Stack
-  // return (
-  //   <NavigationContainer>
-  //     {/* PASO 4: Mueve estos screenOptions aquí */}
-  //     <Stack.Navigator
-  //       screenOptions={{
-  //         headerStyle: { backgroundColor: '#161b22' },
-  //         headerTintColor: '#e6edf3',
-  //         headerTitleStyle: { fontWeight: '600' },
-  //         contentStyle: { backgroundColor: '#0d1117' },
-  //       }}
-  //     >
-  //       <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Productos' }} />
-  //       {/* PASO 4: Título dinámico con params */}
-  //       {/* <Stack.Screen
-  //         name="Detail"
-  //         component={DetailScreen}
-  //         options={({ route }) => ({ title: route.params.name })}
-  //       /> */}
-  //       {/* PASO 1 (sin titulo dinámico aún): */}
-  //       <Stack.Screen name="Detail" component={DetailScreen} options={{ title: 'Detalle' }} />
-  //     </Stack.Navigator>
-  //   </NavigationContainer>
-  // );
-
-  // Vista placeholder — reemplázala con el bloque del PASO 1
   return (
-    <View style={styles.placeholder}>
-      <StatusBar barStyle="light-content" backgroundColor="#0d1117" />
-      <Text style={styles.placeholderTitle}>Stack Navigator</Text>
-      <Text style={styles.placeholderSub}>Descomenta PASO 1 para comenzar</Text>
-    </View>
+    <NavigationContainer>
+      {/* PASO 4: screenOptions con tema oscuro */}
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: '#161b22' },
+          headerTintColor: '#e6edf3',
+          headerTitleStyle: { fontWeight: '600' },
+          contentStyle: { backgroundColor: '#0d1117' },
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Productos' }} />
+        {/* PASO 4: título dinámico con params */}
+        <Stack.Screen
+          name="Detail"
+          component={DetailScreen}
+          options={({ route }) => ({ title: route.params.name })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -267,21 +243,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#61DAFB',
     fontWeight: '600',
-  },
-  placeholder: {
-    flex: 1,
-    backgroundColor: '#0d1117',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  placeholderTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#e6edf3',
-    marginBottom: 8,
-  },
-  placeholderSub: {
-    fontSize: 14,
-    color: '#8b949e',
   },
 });
