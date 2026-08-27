@@ -1,0 +1,2 @@
+minimumReleaseAgeExclude:
+  - '@expo/metro-runtime@57.0.14'

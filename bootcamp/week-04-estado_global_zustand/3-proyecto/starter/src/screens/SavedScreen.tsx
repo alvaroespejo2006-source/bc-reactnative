@@ -1,7 +1,5 @@
 // src/screens/SavedScreen.tsx
-// Pantalla de guardados: muestra todos los ítems que el usuario guardó.
-// Lee el estado directamente desde el savedStore (sin props).
-// Demuestra que el mismo store Zustand mantiene consistencia entre tabs.
+// Carrito de compra — plantas agregadas desde el detalle.
 
 import React from 'react';
 import {
@@ -15,13 +13,7 @@ import {
 
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '../theme';
 import type { Item } from '../types';
-
-// TODO: importar el store
-// import { useSavedStore } from '../stores/savedStore';
-
-// ============================================================
-// SUB-COMPONENTE: SavedItem
-// ============================================================
+import { useSavedStore } from '../stores/savedStore';
 
 interface SavedItemProps {
   item: Item;
@@ -40,14 +32,14 @@ function SavedItem({ item, onRemove }: SavedItemProps): React.JSX.Element {
           {item.name}
         </Text>
         <Text style={styles.cardDescription} numberOfLines={1}>
-          {item.description}
+          {item.category} · ${item.price.toLocaleString('es-CO')}
         </Text>
       </View>
 
       <Pressable
         style={({ pressed }) => [styles.removeButton, pressed && { opacity: 0.6 }]}
         onPress={onRemove}
-        accessibilityLabel={`Quitar ${item.name} de guardados`}
+        accessibilityLabel={`Quitar ${item.name} del carrito`}
       >
         <Text style={styles.removeButtonText}>✕</Text>
       </Pressable>
@@ -55,20 +47,12 @@ function SavedItem({ item, onRemove }: SavedItemProps): React.JSX.Element {
   );
 }
 
-// ============================================================
-// PANTALLA: SavedScreen
-// ============================================================
-
 export function SavedScreen(): React.JSX.Element {
-  // TODO: conectar con el savedStore
-  // const items     = useSavedStore((state) => state.items);
-  // const removeItem = useSavedStore((state) => state.removeItem);
-  // const clearAll  = useSavedStore((state) => state.clearAll);
+  const items = useSavedStore((state) => state.items);
+  const removeItem = useSavedStore((state) => state.removeItem);
+  const clearAll = useSavedStore((state) => state.clearAll);
 
-  // Placeholder hasta que el store esté implementado
-  const items: Item[] = [];
-  const removeItem = (_id: string): void => {};
-  const clearAll = (): void => {};
+  const total = items.reduce((sum, item) => sum + item.price, 0);
 
   const renderItem: ListRenderItem<Item> = ({ item }) => (
     <SavedItem item={item} onRemove={() => removeItem(item.id)} />
@@ -86,21 +70,21 @@ export function SavedScreen(): React.JSX.Element {
           items.length > 0 ? (
             <View style={styles.header}>
               <Text style={styles.sectionLabel}>
-                {items.length} guardado{items.length !== 1 ? 's' : ''}
+                {items.length} planta{items.length !== 1 ? 's' : ''} · Total: $
+                {total.toLocaleString('es-CO')}
               </Text>
-              {/* TODO: botón "Limpiar todo" usando clearAll del store */}
               <Pressable onPress={clearAll} style={styles.clearButton}>
-                <Text style={styles.clearButtonText}>Limpiar todo</Text>
+                <Text style={styles.clearButtonText}>Vaciar carrito</Text>
               </Pressable>
             </View>
           ) : null
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>☆</Text>
-            <Text style={styles.emptyTitle}>Sin guardados aún</Text>
+            <Text style={styles.emptyIcon}>🛒</Text>
+            <Text style={styles.emptyTitle}>Tu carrito está vacío</Text>
             <Text style={styles.emptySubtitle}>
-              Ve a la lista principal y guarda tus ítems favoritos.
+              Ve al catálogo y agrega tus plantas favoritas.
             </Text>
           </View>
         }
@@ -108,10 +92,6 @@ export function SavedScreen(): React.JSX.Element {
     </View>
   );
 }
-
-// ============================================================
-// ESTILOS
-// ============================================================
 
 const styles = StyleSheet.create({
   container: {
@@ -133,6 +113,7 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.label,
     textTransform: 'uppercase',
     letterSpacing: 1,
+    flexShrink: 1,
   },
   clearButton: {
     padding: SPACING.xs,

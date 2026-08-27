@@ -1,57 +1,127 @@
 // src/data/mockData.ts
-// Datos de ejemplo genéricos para el proyecto.
-// El estudiante debe reemplazar estos datos con los de su dominio asignado.
+// Dominio: Vivero de plantas.
 
 import type { Item } from '../types';
 
-// ============================================================
-// LISTA DE ÍTEMS
-// ============================================================
-// TODO: reemplaza estos ítems con los de tu dominio asignado.
-//   Biblioteca  → libros con author, year, genre
-//   Farmacia    → medicamentos con price, stock, prescription
-//   Gimnasio    → clases con instructor, schedule, capacity
-//   Restaurante → platillos con price, category, spiceLevel
-//   Cine        → películas con director, duration, genre
 export const ITEMS: Item[] = [
   {
     id: '1',
-    name: 'Ítem Uno',
-    description: 'Descripción detallada del primer ítem. Adapta este campo a tu dominio.',
+    name: 'Suculenta Echeveria',
+    category: 'Suculenta',
+    supplier: 'Vivero El Rosal',
+    price: 12000,
+    description: 'Planta compacta de hojas carnosas dispuestas en roseta. Ideal para espacios pequeños y bajo mantenimiento.',
+    light: 'Luz directa o semi-directa',
+    watering: 'Cada 12-15 días',
   },
   {
     id: '2',
-    name: 'Ítem Dos',
-    description: 'Descripción detallada del segundo ítem. Adapta este campo a tu dominio.',
+    name: 'Ficus Lyrata',
+    category: 'Árbol de interior',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 85000,
+    description: 'Árbol de interior con grandes hojas en forma de violín. Aporta un toque decorativo imponente.',
+    light: 'Luz indirecta brillante',
+    watering: 'Cada 7 días',
   },
   {
     id: '3',
-    name: 'Ítem Tres',
-    description: 'Descripción detallada del tercer ítem. Adapta este campo a tu dominio.',
+    name: 'Rosal Rojo',
+    category: 'Arbusto ornamental',
+    supplier: 'Vivero El Rosal',
+    price: 25000,
+    description: 'Arbusto floral clásico de flores rojas intensas, ideal para jardines exteriores.',
+    light: 'Sol pleno',
+    watering: 'Cada 3-4 días',
   },
   {
     id: '4',
-    name: 'Ítem Cuatro',
-    description: 'Descripción detallada del cuarto ítem. Adapta este campo a tu dominio.',
+    name: 'Orégano',
+    category: 'Hierba aromática',
+    supplier: 'Agroinsumos del Valle',
+    price: 8000,
+    description: 'Hierba aromática de uso culinario, fácil de cultivar en maceta o huerta casera.',
+    light: 'Sol pleno o semi-sombra',
+    watering: 'Cada 4-5 días',
   },
   {
     id: '5',
-    name: 'Ítem Cinco',
-    description: 'Descripción detallada del quinto ítem. Adapta este campo a tu dominio.',
+    name: 'Sábila',
+    category: 'Suculenta',
+    supplier: 'Agroinsumos del Valle',
+    price: 10000,
+    description: 'Planta medicinal de hojas gruesas con gel cicatrizante. Muy resistente a la sequía.',
+    light: 'Luz directa',
+    watering: 'Cada 15-20 días',
   },
   {
     id: '6',
-    name: 'Ítem Seis',
-    description: 'Descripción detallada del sexto ítem. Adapta este campo a tu dominio.',
+    name: 'Cactus San Pedro',
+    category: 'Cactus',
+    supplier: 'Vivero El Rosal',
+    price: 32000,
+    description: 'Cactus columnar de crecimiento vertical, muy resistente y de bajo mantenimiento.',
+    light: 'Luz directa',
+    watering: 'Cada 20-25 días',
   },
   {
     id: '7',
-    name: 'Ítem Siete',
-    description: 'Descripción detallada del séptimo ítem. Adapta este campo a tu dominio.',
+    name: 'Albahaca',
+    category: 'Hierba aromática',
+    supplier: 'Agroinsumos del Valle',
+    price: 7000,
+    description: 'Hierba aromática de rápido crecimiento, ideal para condimentar y repeler insectos.',
+    light: 'Sol pleno',
+    watering: 'Cada 2-3 días',
   },
   {
     id: '8',
-    name: 'Ítem Ocho',
-    description: 'Descripción detallada del octavo ítem. Adapta este campo a tu dominio.',
+    name: 'Orquídea Phalaenopsis',
+    category: 'Planta de flor',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 60000,
+    description: 'Orquídea de flores duraderas y elegantes, popular como planta de interior.',
+    light: 'Luz indirecta',
+    watering: 'Cada 7-10 días',
+  },
+  {
+    id: '9',
+    name: 'Potos',
+    category: 'Árbol de interior',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 18000,
+    description: 'Planta trepadora de hojas acorazonadas, muy tolerante a condiciones de poca luz.',
+    light: 'Luz baja a indirecta',
+    watering: 'Cada 7 días',
+  },
+  {
+    id: '10',
+    name: 'Girasol',
+    category: 'Planta de flor',
+    supplier: 'Agroinsumos del Valle',
+    price: 15000,
+    description: 'Planta de flor grande y vistosa que sigue la trayectoria del sol durante el día.',
+    light: 'Sol pleno',
+    watering: 'Cada 2-3 días',
+  },
+  {
+    id: '11',
+    name: 'Lavanda',
+    category: 'Hierba aromática',
+    supplier: 'Vivero El Rosal',
+    price: 20000,
+    description: 'Planta aromática de flores moradas, usada en aromaterapia y jardinería ornamental.',
+    light: 'Sol pleno',
+    watering: 'Cada 6-7 días',
+  },
+  {
+    id: '12',
+    name: 'Bugambilia',
+    category: 'Arbusto ornamental',
+    supplier: 'Plantas Verdes S.A.S.',
+    price: 28000,
+    description: 'Arbusto trepador de brácteas coloridas, muy resistente y de floración abundante.',
+    light: 'Sol pleno',
+    watering: 'Cada 4-5 días',
   },
 ];
