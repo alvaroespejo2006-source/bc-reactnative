@@ -1,6 +1,3 @@
-// src/navigation/RootNavigator.tsx
-// Stack Navigator con tres pantallas: Home, Detail y Create.
-
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Pressable, Text } from 'react-native';
@@ -30,8 +27,7 @@ export function RootNavigator(): React.JSX.Element {
         name="Home"
         component={HomeScreen}
         options={({ navigation }) => ({
-          // TODO: cambiar el título al nombre de tu dominio
-          title: 'Ítems',
+          title: 'Catálogo del Vivero',
           headerRight: () => (
             <Pressable onPress={() => navigation.navigate('Create')}>
               <Text style={{ color: COLORS.accent, fontSize: 24, fontWeight: '300' }}>
@@ -49,7 +45,7 @@ export function RootNavigator(): React.JSX.Element {
       <Stack.Screen
         name="Create"
         component={CreateScreen}
-        options={{ title: 'Nuevo ítem', presentation: 'modal' }}
+        options={{ title: 'Nueva planta', presentation: 'modal' }}
       />
     </Stack.Navigator>
   );

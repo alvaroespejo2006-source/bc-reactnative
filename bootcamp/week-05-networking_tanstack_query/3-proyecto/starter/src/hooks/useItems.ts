@@ -1,99 +1,98 @@
 // src/hooks/useItems.ts
-// Custom hooks que encapsulan la lógica de fetching del dominio.
-// Los componentes consumen estos hooks, no llaman a apiClient directamente.
+// La API (JSONPlaceholder) da title/body de relleno en latín.
+// Mapeamos esos posts a nuestro dominio, pero usamos nombres reales
+// de plantas del vivero en vez del texto en latín del title.
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../services/api';
 import type { CreateItemPayload, Item } from '../types';
 
-// ============================================================
-// QUERY KEY
-// ============================================================
-// Centralizar la queryKey evita errores de typo al invalidar.
-// TODO: renombra según tu dominio: 'books', 'products', 'dishes', etc.
-export const ITEMS_QUERY_KEY = ['items'] as const;
+export const ITEMS_QUERY_KEY = ['plants'] as const;
 
-// ============================================================
-// useItems — obtener lista de ítems
-// ============================================================
-// TODO: implementar la queryFn que llama a tu endpoint real.
-//
-// Ejemplo con JSONPlaceholder (proxy mientras tienes API real):
-//   const { data } = await apiClient.get<Item[]>('/posts?_limit=20');
-//
-// Ejemplo con tu API propia:
-//   const { data } = await apiClient.get<Item[]>('/items');
+const PLANT_NAMES = [
+  'Suculenta Echeveria',
+  'Ficus Lyrata',
+  'Rosal Rojo',
+  'Orégano',
+  'Sábila',
+  'Cactus San Pedro',
+  'Albahaca',
+  'Orquídea Phalaenopsis',
+  'Potos',
+  'Girasol',
+  'Lavanda',
+  'Bugambilia',
+  'Jazmín',
+  'Menta',
+  'Romero',
+];
+
+const CATEGORIES = ['Suculenta', 'Árbol de interior', 'Hierba aromática', 'Planta de flor', 'Cactus'];
+const SUPPLIERS = ['Vivero El Rosal', 'Plantas Verdes S.A.S.', 'Agroinsumos del Valle'];
+const LIGHTS = ['Luz directa', 'Luz indirecta', 'Sol pleno', 'Semi-sombra'];
+const WATERINGS = ['Cada 3-4 días', 'Cada 7 días', 'Cada 15 días', 'Cada 20 días'];
+
+interface RawPost {
+  id: number;
+  title: string;
+  body: string;
+}
+
+function mapPostToPlant(post: RawPost): Item {
+  const idx = post.id % 5;
+  return {
+    id: post.id,
+    // Usamos el nombre real de planta según el id, no el title en latín
+    name: PLANT_NAMES[(post.id - 1) % PLANT_NAMES.length],
+    // El body en latín lo usamos como "descripción de catálogo" genérica,
+    // o puedes reemplazarlo también si prefieres texto 100% coherente:
+    description: post.body,
+    category: CATEGORIES[idx % CATEGORIES.length],
+    supplier: SUPPLIERS[post.id % SUPPLIERS.length],
+    price: 5000 + (post.id % 12) * 7000,
+    light: LIGHTS[post.id % LIGHTS.length],
+    watering: WATERINGS[post.id % WATERINGS.length],
+  };
+}
 
 export function useItems() {
   return useQuery<Item[]>({
     queryKey: ITEMS_QUERY_KEY,
     queryFn: async () => {
-      // TODO: reemplaza '/posts' por el endpoint de tu dominio
-      // La respuesta debe ser un array de objetos que mapees a tu interfaz Item
-      const { data } = await apiClient.get<Item[]>('/posts?_limit=15');
-      return data;
+      const { data } = await apiClient.get<RawPost[]>('/posts?_limit=15');
+      return data.map(mapPostToPlant);
     },
   });
 }
-
-// ============================================================
-// useItemById — obtener un ítem individual por ID
-// ============================================================
-// Usado en DetailScreen para obtener los detalles completos.
 
 export function useItemById(id: string | number) {
   return useQuery<Item>({
     queryKey: [...ITEMS_QUERY_KEY, id],
     queryFn: async () => {
-      // TODO: reemplaza '/posts' por el endpoint de tu dominio
-      const { data } = await apiClient.get<Item>(`/posts/${id}`);
-      return data;
+      const { data } = await apiClient.get<RawPost>(`/posts/${id}`);
+      return mapPostToPlant(data);
     },
-    // La query solo corre si hay un id válido
     enabled: !!id,
   });
 }
-
-// ============================================================
-// useCreateItem — crear un nuevo ítem
-// ============================================================
-// TODO: implementar la mutationFn que hace el POST a tu API.
 
 export function useCreateItem() {
   const queryClient = useQueryClient();
 
   return useMutation<Item, Error, CreateItemPayload>({
     mutationFn: async (payload) => {
-      // TODO: reemplaza '/posts' por el endpoint de tu dominio
-      const { data } = await apiClient.post<Item>('/posts', payload);
-      return data;
+      const { data } = await apiClient.post<RawPost>('/posts', {
+        title: payload.name,
+        body: payload.description,
+        userId: 1,
+      });
+      return { ...payload, id: data.id };
     },
     onSuccess: () => {
-      // Invalida el caché → TanStack Query refetch la lista automáticamente
       queryClient.invalidateQueries({ queryKey: ITEMS_QUERY_KEY });
     },
     onError: (error) => {
-      // TODO: mostrar un toast o alerta al usuario con el mensaje de error
-      console.error('Failed to create item:', error.message);
-    },
-  });
-}
-
-// ============================================================
-// useDeleteItem — eliminar un ítem por ID
-// ============================================================
-// TODO: implementar si tu dominio lo requiere.
-
-export function useDeleteItem() {
-  const queryClient = useQueryClient();
-
-  return useMutation<void, Error, string | number>({
-    mutationFn: async (id) => {
-      // TODO: reemplaza '/posts' por el endpoint de tu dominio
-      await apiClient.delete(`/posts/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ITEMS_QUERY_KEY });
+      console.error('No se pudo crear la planta:', error.message);
     },
   });
 }
