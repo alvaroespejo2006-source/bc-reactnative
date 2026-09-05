@@ -1,63 +1,90 @@
 // src/hooks/useItems.ts
-// Custom hooks para CRUD de ítems usando TanStack Query + Axios
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
 import { apiClient } from '../services/api';
 import type { CreateItemPayload, Item, UpdateItemPayload } from '../types';
 
-export const ITEMS_QUERY_KEY = ['items'] as const;
+export const ITEMS_QUERY_KEY = ['plants'] as const;
 
-// ─────────────────────────────────────────
-// READ — lista de ítems
-// ─────────────────────────────────────────
+const CATEGORIES = ['Suculenta', 'Árbol de interior', 'Hierba aromática', 'Planta de flor', 'Cactus'];
+const SUPPLIERS = ['Vivero El Rosal', 'Plantas Verdes S.A.S.', 'Agroinsumos del Valle'];
+const PLANT_NAMES = [
+  'Suculenta Echeveria', 'Ficus Lyrata', 'Rosal Rojo', 'Orégano', 'Sábila',
+  'Cactus San Pedro', 'Albahaca', 'Orquídea Phalaenopsis', 'Potos', 'Girasol',
+  'Lavanda', 'Bugambilia', 'Jazmín', 'Menta', 'Romero',
+];
+
+interface RawPost {
+  id: number;
+  title: string;
+  body: string;
+}
+
+function mapPostToPlant(post: RawPost): Item {
+  const idx = post.id % 5;
+  return {
+    id: post.id,
+    name: PLANT_NAMES[(post.id - 1) % PLANT_NAMES.length],
+    description: post.body,
+    category: CATEGORIES[idx % CATEGORIES.length],
+    supplier: SUPPLIERS[post.id % SUPPLIERS.length],
+    price: 5000 + (post.id % 12) * 7000,
+  };
+}
 
 export function useItems() {
   return useQuery<Item[]>({
     queryKey: ITEMS_QUERY_KEY,
-    queryFn: () => apiClient.get<Item[]>('/posts?_limit=15').then(r => r.data),
+    queryFn: async () => {
+      const { data } = await apiClient.get<RawPost[]>('/posts?_limit=15');
+      return data.map(mapPostToPlant);
+    },
   });
 }
 
-// ─────────────────────────────────────────
-// READ — ítem individual (para formulario Edit)
-// ─────────────────────────────────────────
-
-export function useItemById(id: number | string) {
+export function useItemById(id: string | number) {
   return useQuery<Item>({
     queryKey: [...ITEMS_QUERY_KEY, id],
-    queryFn: () => apiClient.get<Item>(`/posts/${id}`).then(r => r.data),
+    queryFn: async () => {
+      const { data } = await apiClient.get<RawPost>(`/posts/${id}`);
+      return mapPostToPlant(data);
+    },
     enabled: !!id,
   });
 }
 
-// ─────────────────────────────────────────
-// CREATE
-// ─────────────────────────────────────────
-
 export function useCreateItem() {
   const queryClient = useQueryClient();
+
   return useMutation<Item, Error, CreateItemPayload>({
-    mutationFn: (payload) =>
-      apiClient.post<Item>('/posts', payload).then(r => r.data),
+    mutationFn: async (payload) => {
+      const { data } = await apiClient.post<RawPost>('/posts', {
+        title: payload.name,
+        body: payload.description,
+        userId: 1,
+      });
+      return { ...payload, id: data.id };
+    },
     onSuccess: () => {
-      // Invalidar la lista para que se refresque automáticamente
       queryClient.invalidateQueries({ queryKey: ITEMS_QUERY_KEY });
     },
   });
 }
 
-// ─────────────────────────────────────────
-// UPDATE — para el formulario Edit
-// ─────────────────────────────────────────
-
 export function useUpdateItem() {
   const queryClient = useQueryClient();
+
   return useMutation<Item, Error, UpdateItemPayload>({
-    mutationFn: (payload) =>
-      apiClient.put<Item>(`/posts/${payload.id}`, payload).then(r => r.data),
+    mutationFn: async (payload) => {
+      const { id, ...rest } = payload;
+      const { data } = await apiClient.put<RawPost>(`/posts/${id}`, {
+        title: rest.name,
+        body: rest.description,
+        userId: 1,
+      });
+      return { ...rest, id: data.id ?? id };
+    },
     onSuccess: (_, variables) => {
-      // Invalidar lista e ítem individual
       queryClient.invalidateQueries({ queryKey: ITEMS_QUERY_KEY });
       queryClient.invalidateQueries({ queryKey: [...ITEMS_QUERY_KEY, variables.id] });
     },

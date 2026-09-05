@@ -1,20 +1,25 @@
-// src/services/api.ts — Instancia centralizada de Axios
+// src/services/api.ts
 
 import axios from 'axios';
 
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL ?? 'https://jsonplaceholder.typicode.com';
+
 export const apiClient = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL ?? 'https://jsonplaceholder.typicode.com',
+  baseURL: API_BASE_URL,
   timeout: 10_000,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
 });
 
-// Interceptor global de errores
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (__DEV__) {
-      console.error('[API error]', error.response?.status, error.config?.url);
+      console.error('[API Error]', error.response?.status, error.config?.url);
     }
     return Promise.reject(error);
-  },
+  }
 );

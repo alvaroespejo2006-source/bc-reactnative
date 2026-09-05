@@ -9,7 +9,7 @@ export const COLORS = {
   accent: '#3B82F6',
   accentLight: '#93C5FD',
   text: '#F9FAFB',
-  textMuted: '#6B7280',
+  textMuted: 'rgb(255, 255, 255)',
   textSecondary: '#9CA3AF',
   error: '#EF4444',
   errorLight: '#FCA5A5',
