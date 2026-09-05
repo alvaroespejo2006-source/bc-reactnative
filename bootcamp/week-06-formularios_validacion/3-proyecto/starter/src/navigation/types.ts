@@ -1,8 +1,7 @@
 // src/navigation/types.ts
-// Tipado del stack de navegación
 
 export type RootStackParamList = {
-  Home:   undefined;
+  Home: undefined;
   Create: undefined;
-  Edit:   { id: number | string; name: string };
+  Edit: { id: string | number; name: string };
 };
