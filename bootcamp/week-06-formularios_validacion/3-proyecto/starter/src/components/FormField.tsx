@@ -1,32 +1,19 @@
 // src/components/FormField.tsx
-// Componente reutilizable que encapsula Controller + TextInput + error.
-// TODO: conectar con control del formulario.
+// Componente genérico y reutilizable: Controller + TextInput + error inline.
+// Usado tanto en CreateScreen como en EditScreen.
 
 import React from 'react';
-import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
-import { Controller, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
+import { StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
+import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '../theme';
 
-// ──────────────────────────────────────────────────────────
-// Props del componente
-// ──────────────────────────────────────────────────────────
-
-interface FormFieldProps<T extends FieldValues> extends TextInputProps {
-  // TODO: tipar correctamente con los generics de React Hook Form
-  // control: Control<T>
-  // name: FieldPath<T>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  name: FieldPath<any>;
+interface FormFieldProps<T extends FieldValues> extends Omit<TextInputProps, 'style'> {
+  control: Control<T>;
+  name: Path<T>;
   label: string;
   errorMessage?: string;
 }
-
-// ──────────────────────────────────────────────────────────
-// Componente
-// ──────────────────────────────────────────────────────────
 
 export function FormField<T extends FieldValues>({
   control,
@@ -36,58 +23,45 @@ export function FormField<T extends FieldValues>({
   ...textInputProps
 }: FormFieldProps<T>): React.JSX.Element {
   return (
-    <View style={styles.container}>
+    <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
-
-      {/* TODO: implementar el Controller que conecta el campo con useForm */}
-      {/* ─────────────────────────────────────────────────────────────────
-        <Controller
-          control={control}
-          name={name}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={[styles.input, !!errorMessage && styles.inputError]}
-              value={typeof value === 'number' ? String(value) : value ?? ''}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              placeholderTextColor={COLORS.textMuted}
-              {...textInputProps}
-            />
-          )}
-        />
-      ───────────────────────────────────────────────────────────────── */}
-
-      {/* Placeholder hasta que implementes el Controller */}
-      <TextInput
-        style={[styles.input, !!errorMessage && styles.inputError]}
-        placeholderTextColor={COLORS.textMuted}
-        {...textInputProps}
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={[styles.input, errorMessage && styles.inputError]}
+            value={value !== undefined ? String(value) : ''}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            placeholderTextColor={COLORS.textSecondary}
+            {...textInputProps}
+          />
+        )}
       />
-
-      {/* Mensaje de error — siempre reserva espacio para evitar layout jumps */}
-      <Text style={styles.error} numberOfLines={1}>
-        {errorMessage ?? ''}
-      </Text>
+      {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
     </View>
   );
 }
 
-// ──────────────────────────────────────────────────────────
-// Estilos
-// ──────────────────────────────────────────────────────────
-
 const styles = StyleSheet.create({
-  container: { gap: SPACING.xs },
-  label: { ...TYPOGRAPHY.label, textTransform: 'uppercase', letterSpacing: 0.6 },
+  field: { gap: SPACING.xs },
+  label: { ...TYPOGRAPHY.body, fontWeight: '600' },
   input: {
     backgroundColor: COLORS.card,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: RADIUS.sm,
-    padding: SPACING.md,
-    ...TYPOGRAPHY.body,
+    padding: SPACING.sm,
+    fontSize: 16,
     color: COLORS.text,
   },
-  inputError: { borderColor: COLORS.error },
-  error: { ...TYPOGRAPHY.error, minHeight: 16 },
+  inputError: {
+    borderColor: COLORS.error,
+  },
+  errorText: {
+    fontSize: 12,
+    color: COLORS.error,
+    marginTop: 2,
+  },
 });
